@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,11 +15,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.Objects;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class Reg {
-    WebDriver driver;
+    private WebDriver driver;
+
 
     @Given("i am on the website")
     public void iAmOnTheWebsite() {
@@ -38,57 +39,79 @@ public class Reg {
     public void iEnterFirstName(String arg0) {
         WebElement text = driver.findElement(By.id("member_firstname"));
         text.sendKeys(arg0);
+
+
     }
 
     @And("i enter last name {string}")
     public void iEnterLastName(String arg0) {
         WebElement text = driver.findElement(By.id("member_lastname"));
         text.sendKeys(arg0);
+
+
     }
 
     @And("i enter mail {string}")
     public void iEnterMail(String arg0) {
         WebElement text = driver.findElement(By.id("member_emailaddress"));
         text.sendKeys(arg0);
+
+
     }
 
     @And("i confirm mail {string}")
     public void iConfirmMail(String arg0) {
         WebElement text = driver.findElement(By.id("member_confirmemailaddress"));
         text.sendKeys(arg0);
+
+
     }
 
     @And("i enter pass {string}")
     public void iEnterPass(String arg0) {
         WebElement text = driver.findElement(By.id("signupunlicenced_password"));
         text.sendKeys(arg0);
+
+
     }
 
     @And("i confirm pass {string}")
     public void iConfirmPass(String arg0) {
         WebElement text = driver.findElement(By.id("signupunlicenced_confirmpassword"));
         text.sendKeys(arg0);
+
+
     }
 
     @And("i accept tos")
-    public void iAcceptTos() {
+    public void iAcceptTos()  {
         driver.findElement(By.cssSelector("label[for='sign_up_25']")).click();
+
+
     }
 
     @And("i accept that im above {int} years")
     public void iAcceptThatImAboveYears(int arg0) {
         driver.findElement(By.cssSelector("label[for='sign_up_26']")).click();
+
+
     }
 
     @And("i press register button")
     public void iPressRegisterButton() {
+
         driver.findElement(By.name("join")).click();
+
+
     }
+
 
     @Then("registration passed")
     public void registrationPassed() {
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.urlContains("Success"));
         assertTrue(Objects.requireNonNull(driver.getCurrentUrl()).contains("Success"));
+
+
 
     }
 
@@ -97,11 +120,42 @@ public class Reg {
     @And("i accept the ethics")
     public void iAcceptTheEthics() {
         driver.findElement(By.cssSelector("label[for='fanmembersignup_agreetocodeofethicsandconduct']")).click();
+
     }
 
-    @Then("account isnt created")
-    public void accountIsntCreated() {
-        assertFalse(Objects.requireNonNull(driver.getCurrentUrl()).contains("Success"));
+
+    @Then("Error last name missing")
+    public void errorLastNameMissing() {
+        WebElement errorMessage = new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector("span[data-valmsg-for='Surname']")
+                )
+        );
+        Assert.assertTrue(errorMessage.isDisplayed());
+
+
+    }
+
+    @Then("error password missmatch")
+    public void errorPasswordMissmatch() {
+        WebElement errorMessage = new WebDriverWait(driver, Duration.ofSeconds(5)).until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector("span[data-valmsg-for='ConfirmPassword']")
+                )
+        );
+        Assert.assertTrue(errorMessage.isDisplayed());
+
+
+    }
+
+    @Then("error tos not accepted")
+    public void errorTosNotAccepted() {
+        WebElement errorMessage = new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                ExpectedConditions.presenceOfElementLocated(
+                        By.cssSelector("span[data-valmsg-for='TermsAccept']")
+                )
+        );
+        Assert.assertTrue(errorMessage.isDisplayed());
 
     }
 }

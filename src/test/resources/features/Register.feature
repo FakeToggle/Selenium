@@ -34,7 +34,7 @@ Feature: Create supporter account
     And i accept that im above 18 years
     And i accept the ethics
     And i press register button
-    Then account isnt created
+    Then Error last name missing
 
 
 
@@ -44,13 +44,13 @@ Feature: Create supporter account
     And i enter last name "Arvidsson"
     And i enter mail "philip.guearv@gmail.com"
     And i confirm mail "philip.guearv@gmail.com"
-    And i enter pass "Lösenord1"
-    And i confirm pass "Lösenord2"
+    And i enter pass "pass1"
     And i accept tos
     And i accept that im above 18 years
     And i accept the ethics
+    And i confirm pass "pass2"
     And i press register button
-    Then account isnt created
+    Then error password missmatch
 
 
 
@@ -65,5 +65,5 @@ Feature: Create supporter account
     And i accept that im above 18 years
     And i accept the ethics
     And i press register button
-    Then account isnt created
+    Then error tos not accepted
 
